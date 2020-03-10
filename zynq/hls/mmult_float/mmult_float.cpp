@@ -36,7 +36,6 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 	// Stream in offset vector
 	LOAD_OFF_1: for (int i = 0; i < CLASSES; i+=WIDTH_RATIO) {
-#pragma HLS PIPELINE II=1
 		converter.packet = pop_stream(in_stream[is_idx++]);
 		offset_buf[i+0] = converter.val.f0;
 		offset_buf[i+1] = converter.val.f1;
