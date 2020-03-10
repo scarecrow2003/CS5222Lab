@@ -64,12 +64,12 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 	// Iterate over batch elements
 	L1: for (int i = 0; i < BATCH; i++) {
+#pragma HLS PIPELINE II=1
 		// Iterate over output classes
 		L2: for (int j = 0; j < CLASSES; j++) {
 			// Perform the dot product
 			T tmp = offset_buf[j];
 			L3: for(int k = 0; k < FEAT; k++) {
-#pragma HLS PIPELINE II=1
 				tmp += in_buf[i][k] * weight_buf[j][k];
 			}
 			out_buf[i][j] = tmp;
