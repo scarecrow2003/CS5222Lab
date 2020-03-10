@@ -11,8 +11,6 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 #pragma HLS INTERFACE axis      port=in_stream
 #pragma HLS INTERFACE axis      port=out_stream
 
-#pragma HLS ARRAY_PARTITION variable=in_buf block factor=2 dim=1
-
 	// Assertions (to avoid out of array bound writes)
 	assert(CLASSES%WIDTH_RATIO==0);
 	assert(FEAT%WIDTH_RATIO==0);
@@ -31,6 +29,8 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 	T weight_buf[CLASSES][FEAT];
 	T in_buf[BATCH][FEAT];
 	T out_buf[BATCH][CLASSES];
+
+#pragma HLS ARRAY_PARTITION variable=in_buf block factor=2 dim=1
 
 	// Input and output AXI stream indices
 	int is_idx = 0;
