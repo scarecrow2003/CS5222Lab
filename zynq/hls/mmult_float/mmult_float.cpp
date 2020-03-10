@@ -43,7 +43,6 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 	// Stream in weight matrix
 	LOAD_W_1: for (int i = 0; i < CLASSES; i++) {
-#pragma HLS PIPELINE II=1
 		LOAD_W_2: for (int j = 0; j < FEAT; j+=WIDTH_RATIO) {
 			// Pop AXI data packet
 			converter.packet = pop_stream(in_stream[is_idx++]);
@@ -55,7 +54,6 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 	// Stream in input matrix
 	LOAD_I_1: for (int i = 0; i < BATCH; i++) {
-#pragma HLS PIPELINE II=1
 		LOAD_I_2: for (int j = 0; j < FEAT; j+=WIDTH_RATIO) {
 			// Pop AXI data packet
 			converter.packet = pop_stream(in_stream[is_idx++]);
