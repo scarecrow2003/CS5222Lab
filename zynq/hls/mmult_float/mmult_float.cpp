@@ -70,7 +70,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 	LT1: for (int t = 0; t < BATCH; t += TILE_SIZE) {
 		LT2: for (int j = 0; j < TILE_SIZE; j++) {
 #pragma HLS PIPELINE II=1
-			LT3: for (int k = 0; k < FEAT; k++) {
+			LT3: for (int k = 0; k < FEAT; k += WIDTH_RATIO) {
 				converter.packet = pop_stream(in_stream[is_idx++]);
 				in_buf[t*TILE_SIZE+j][k+0] = converter.val.f0;
 				in_buf[t*TILE_SIZE+j][k+1] = converter.val.f1;
