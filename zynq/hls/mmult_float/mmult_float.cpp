@@ -27,8 +27,10 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 	// Hardware buffers
 	T offset_buf[CLASSES];
 	T weight_buf[CLASSES][FEAT];
-	T in_buf[BATCH][FEAT];
-	T out_buf[BATCH][CLASSES];
+	// T in_buf[BATCH][FEAT];
+	// T out_buf[BATCH][CLASSES];
+	T in_buf[TILE_SIZE][FEAT];
+	T out_buf[TILE_SIZE][CLASSES];
 
 #pragma HLS ARRAY_PARTITION variable=in_buf block factor=16 dim=2
 #pragma HLS ARRAY_PARTITION variable=weight_buf block factor=16 dim=2
@@ -56,12 +58,23 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 
 	// Stream in input matrix
-	LOAD_I_1: for (int i = 0; i < BATCH; i++) {
-		LOAD_I_2: for (int j = 0; j < FEAT; j+=WIDTH_RATIO) {
-			// Pop AXI data packet
-			converter.packet = pop_stream(in_stream[is_idx++]);
-			in_buf[i][j+0]  = converter.val.f0;
-			in_buf[i][j+1]  = converter.val.f1;
+	// LOAD_I_1: for (int i = 0; i < BATCH; i++) {
+	// 	LOAD_I_2: for (int j = 0; j < FEAT; j+=WIDTH_RATIO) {
+	// 		// Pop AXI data packet
+	// 		converter.packet = pop_stream(in_stream[is_idx++]);
+	// 		in_buf[i][j+0]  = converter.val.f0;
+	// 		in_buf[i][j+1]  = converter.val.f1;
+	// 	}
+	// }
+
+	LT1: for (int t = 0; t < BATCH; t += TILE_SIZE) {
+		LT2: for (int j = 0; j < TILE_SIZE; j++) {
+#pragma HLS PIPELINE II=1
+			LT3: for (int k = 0; k < FEAT; k++) {
+				converter.package = pop_stream(in_stream[is_idx++]);
+				in_buf[t*TILE_SIZE+j][k+0] = converter.val.f0;
+				in_buf[t*TILE_SIZE+j][k+1] = converter.val.f1;
+			}
 		}
 	}
 
