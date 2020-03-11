@@ -10,8 +10,6 @@ typedef float T;
 #define FEAT 256
 #define CLASSES 10
 
-#define TILE_SIZE 128
-
 // Input/Output Stream Size
 #define IS_SIZE (BATCH*FEAT/WIDTH_RATIO+(FEAT+1)*CLASSES/WIDTH_RATIO)
 #define OS_SIZE (BATCH*CLASSES/WIDTH_RATIO)

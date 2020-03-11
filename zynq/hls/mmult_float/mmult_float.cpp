@@ -3,6 +3,8 @@
 
 #include "mmult.h"
 
+#define TILE_SIZE 128
+
 // --------------------------------------------------------------------
 // function to be accelerated in HW wrapped with AXI4-Stream interface
 void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
@@ -83,8 +85,8 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 			L2: for (int j = 0; j < CLASSES; j++) {
 #pragma HLS PIPELINE II=1
 				T tmp = offset_buf[j];
-				L3: for (int k = 0; i < FEAT; k++) {
-					tmp += in_buf[i][j] * weight_buf[j][k];
+				L3: for (int k = 0; k < FEAT; k++) {
+					tmp += in_buf[i][k] * weight_buf[j][k];
 				}
 				out_buf[i][j] = tmp;
 			}
