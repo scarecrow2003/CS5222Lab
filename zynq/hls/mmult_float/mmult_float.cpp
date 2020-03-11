@@ -30,7 +30,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 	T in_buf[BATCH][FEAT];
 	T out_buf[BATCH][CLASSES];
 
-#pragma HLS ARRAY_PARTITION variable=in_buf block factor=64 dim=1
+#pragma HLS ARRAY_PARTITION variable=in_buf block factor=8 dim=2
 
 	// Input and output AXI stream indices
 	int is_idx = 0;
@@ -66,9 +66,9 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 
 	// Iterate over batch elements
 	L1: for (int i = 0; i < BATCH; i++) {
-#pragma HLS PIPELINE II=1
 		// Iterate over output classes
 		L2: for (int j = 0; j < CLASSES; j++) {
+#pragma HLS PIPELINE II=1
 			// Perform the dot product
 			T tmp = offset_buf[j];
 			L3: for(int k = 0; k < FEAT; k++) {
