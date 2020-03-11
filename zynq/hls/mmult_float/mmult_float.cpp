@@ -67,41 +67,64 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 	// 	}
 	// }
 
-	LT1: for (int t = 0; t < BATCH; t += TILE_SIZE) {
-		LT2: for (int j = 0; j < TILE_SIZE; j++) {
-#pragma HLS PIPELINE II=1
-			LT3: for (int k = 0; k < FEAT; k += WIDTH_RATIO) {
+	// Iterate over tiles
+	LT: for (int t = 0; t < BATCH; t += TILE_SIZE) {
+		// Load input tile
+		LOAD_I_1: for (int i = 0; i < TILE_SIZE; i++) {
+			LOAD_I_2: for (int j = 0; j < FEAT; j += WIDTH_RATIO) {
 				converter.packet = pop_stream(in_stream[is_idx++]);
-				in_buf[t*TILE_SIZE+j][k+0] = converter.val.f0;
-				in_buf[t*TILE_SIZE+j][k+1] = converter.val.f1;
+				in_buf[i][j+0] = converter.val.f0;
+				in_buf[i][j+1] = converter.val.f1;
+			}
+		}
+
+		// Perform matrix multiplication on input tile
+		L1: for (int i = 0; i < TILE_SIZE; i++) {
+			L2: for (int j = 0; j < CLASSES; j++) {
+#pragma HLS PIPELINE II=1
+				T tmp = offset_buf[j];
+				L3: for (int k = 0; i < FEAT; k++) {
+					tmp += in_buf[i][j] * weight_buf[j][k];
+				}
+				out_buf[i][j] = tmp;
+			}
+		}
+
+		// Store out tile
+		STORE_0_1: for (int i = 0; i < TILE_SIZE; i++) {
+#pragma HLS PIPELINE II=1
+			STORE_0_2: for (int j = 0; j < CLASSES; j += WIDTH_RATIO) {
+				converter.val.f0 = out_buf[i][j+0];
+				converter.val.f1 = out_buf[i][j+1];
+				out_stream[os_idx++] = push_stream(converter.packet, os_idx = (OS_SIZE));
 			}
 		}
 	}
 
-	// Iterate over batch elements
-	L1: for (int i = 0; i < BATCH; i++) {
-		// Iterate over output classes
-		L2: for (int j = 0; j < CLASSES; j++) {
-#pragma HLS PIPELINE II=1
-			// Perform the dot product
-			T tmp = offset_buf[j];
-			L3: for(int k = 0; k < FEAT; k++) {
-				tmp += in_buf[i][k] * weight_buf[j][k];
-			}
-			out_buf[i][j] = tmp;
-		}
-	}
+// 	// Iterate over batch elements
+// 	L1: for (int i = 0; i < BATCH; i++) {
+// 		// Iterate over output classes
+// 		L2: for (int j = 0; j < CLASSES; j++) {
+// #pragma HLS PIPELINE II=1
+// 			// Perform the dot product
+// 			T tmp = offset_buf[j];
+// 			L3: for(int k = 0; k < FEAT; k++) {
+// 				tmp += in_buf[i][k] * weight_buf[j][k];
+// 			}
+// 			out_buf[i][j] = tmp;
+// 		}
+// 	}
 
-	// Stream out output matrix
-	STORE_O_1: for (int i = 0; i < BATCH; i++) {
-#pragma HLS PIPELINE II=1
-		STORE_O_2: for (int j = 0; j < CLASSES; j+=WIDTH_RATIO) {
-			// Push output element into AXI stream
-			converter.val.f0 = out_buf[i][j+0];
-			converter.val.f1 = out_buf[i][j+1];
-			out_stream[os_idx++] = push_stream(converter.packet, os_idx == (OS_SIZE));
-		}
-	}
+// 	// Stream out output matrix
+// 	STORE_O_1: for (int i = 0; i < BATCH; i++) {
+// #pragma HLS PIPELINE II=1
+// 		STORE_O_2: for (int j = 0; j < CLASSES; j+=WIDTH_RATIO) {
+// 			// Push output element into AXI stream
+// 			converter.val.f0 = out_buf[i][j+0];
+// 			converter.val.f1 = out_buf[i][j+1];
+// 			out_stream[os_idx++] = push_stream(converter.packet, os_idx == (OS_SIZE));
+// 		}
+// 	}
 }
 
 
