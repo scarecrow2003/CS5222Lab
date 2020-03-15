@@ -11,6 +11,8 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 #pragma HLS INTERFACE axis      port=in_stream
 #pragma HLS INTERFACE axis      port=out_stream
 
+#pragma HLS RESOURCE variable=mult core=Mul_LUT
+
 	// Assertions (to avoid out of array bound writes)
 	assert(BATCH%TILING==0);
 	assert(FEAT%W_WIDTH_RATIO==0);
