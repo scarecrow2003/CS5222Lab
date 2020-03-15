@@ -37,7 +37,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 		}
 	}
 	axi_T packet = pop_stream(in_stream[is_idx++]);
-	FINISH_OFF: for (int i = CLASSES-OUT_WIDTH_RATIO; j < CLASSES; j++) {
+	FINISH_OFF: for (int i = CLASSES-OUT_WIDTH_RATIO; i < CLASSES; i++) {
 		out_bit_T bits = (packet>>((i%OUT_WIDTH_RATIO)*OUT_WIDTH));
 		offset_buf[i] = *((out_T*) &bits) & ((1ULL<<OUT_WIDTH)-1);
 	}
