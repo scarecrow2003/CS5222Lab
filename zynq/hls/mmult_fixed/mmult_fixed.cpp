@@ -11,8 +11,6 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 #pragma HLS INTERFACE axis      port=in_stream
 #pragma HLS INTERFACE axis      port=out_stream
 
-#pragma HLS RESOURCE variable=mult core=Mul_LUT
-
 	// Assertions (to avoid out of array bound writes)
 	assert(BATCH%TILING==0);
 	assert(FEAT%W_WIDTH_RATIO==0);
@@ -83,6 +81,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 				out_T tmp = offset_buf[j];
 				L3: for(int k = 0; k < FEAT; k++) {
 					out_T mult = in_buf[i][k] * weight_buf[j][k];
+#pragma HLS RESOURCE variable=mult core=Mul_LUT
 					tmp += mult;
 				}
 				out_buf[i][j] = tmp;
