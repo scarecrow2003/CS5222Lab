@@ -76,7 +76,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 		L1: for (int i = 0; i < TILING; i++) {
 			// Iterate over output classes
 			L2: for (int j = 0; j < CLASSES; j++) {
-#pragma HLS PIPELINE II=1
+#pragma HLS PIPELINE
 				// Perform the dot product
 				out_T tmp = offset_buf[j];
 				L3: for(int k = 0; k < FEAT; k++) {
@@ -91,7 +91,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 		// Stream out output matrix
 		// CSE548 TODO
 		STORE_O_1: for (int i = 0; i < TILING; i++) {
-#pragma HLS PIPELINE II=1
+#pragma HLS PIPELINE
 			STORE_O_2: for (int j = 0; j < CLASSES; j+=OUT_WIDTH_RATIO) {
 				axi_T packet = 0;
 				PACK_OUT: for (int w = 0; w < OUT_WIDTH_RATIO; w++) {
