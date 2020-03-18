@@ -117,7 +117,7 @@ def parse_args():
                         help='the input data directory')
     parser.add_argument('--num-examples', type=int, default=8,
                         help='the number of training examples')
-    parser.add_argument('--dim', type=int, default=16,
+    parser.add_argument('--dim', type=int, default=8,
                         help='height and width of mnist dataset to resize to')
     parser.add_argument('--debug', action='store_true',
                         help='debug mode')
