@@ -3,8 +3,10 @@
 #include <ap_axi_sdata.h>
 
 // Type definition of matrix elements
-typedef ap_int<8> w_T;
-typedef ap_uint<8> in_T;
+// typedef ap_int<8> w_T;
+// typedef ap_uint<8> in_T;
+typedef ap_int<4> w_T;
+typedef ap_uint<4> in_T;
 typedef ap_int<32> out_T;
 // Equivalent-width integer types
 typedef unsigned char w_bit_T;
@@ -15,8 +17,10 @@ typedef unsigned out_bit_T;
 typedef unsigned long long axi_T;
 
 // Datatype widths in bits
-#define W_WIDTH (sizeof(w_T)*8)
-#define IN_WIDTH (sizeof(in_T)*8)
+// #define W_WIDTH (sizeof(w_T)*8)
+// #define IN_WIDTH (sizeof(in_T)*8)
+#define W_WIDTH 4
+#define IN_WIDTH 4
 #define OUT_WIDTH (sizeof(out_T)*8)
 
 // Data type ratio between data type and axi width
