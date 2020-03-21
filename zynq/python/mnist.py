@@ -117,7 +117,7 @@ def parse_args():
                         help='the input data directory')
     parser.add_argument('--num-examples', type=int, default=8,
                         help='the number of training examples')
-    parser.add_argument('--dim', type=int, default=8,
+    parser.add_argument('--dim', type=int, default=16,
                         help='height and width of mnist dataset to resize to')
     parser.add_argument('--debug', action='store_true',
                         help='debug mode')
@@ -140,15 +140,16 @@ if __name__ == '__main__':
 
     # Fixed point computation
     # CSE 548: Todo: tweak the SCALE to get less than 20% classification error
-    SCALE = 2490
+    SCALE = 36948
     # CSE 548 - Change me
     offset = reg.intercept_
     weight = reg.coef_
-    offset = np.clip(offset*SCALE, -128, 127)
+    offset = np.clip(offset*SCALE, -64, 63)
     offset = offset.astype(np.int32)
     weight = np.clip(weight*SCALE, -64, 63)
     weight = weight.astype(np.int8)
     # Perform fixed-point classification
+    test_data = test_data / 2
     ones = np.ones(len(test_data)).reshape((len(test_data),1))
     i_p = np.append(ones, test_data, axis=1)
     w_p = np.append(offset.reshape(10,1), weight, axis=1)

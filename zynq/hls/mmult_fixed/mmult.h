@@ -21,8 +21,7 @@ typedef unsigned long long axi_T;
 // #define IN_WIDTH (sizeof(in_T)*8)
 #define W_WIDTH 8
 #define IN_WIDTH 8
-#define W_BIT_WIDTH 4
-#define IN_BIT_WIDTH 4
+#define BIT_WIDTH 4
 #define OUT_WIDTH (sizeof(out_T)*8)
 
 // Data type ratio between data type and axi width
