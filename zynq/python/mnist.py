@@ -132,7 +132,9 @@ if __name__ == '__main__':
     test_data, test_labels = getDataSet(args, 'test')
 
     # Linear regression
-    reg = linear_model.Ridge()
+    reg = linear_model.Ridge(alpha=5, normalize=False, solver='sag')
+    from sklearn import preprocessing
+    train_data = preprocessing.scale(train_data)
     reg.fit(train_data, train_labels)
 
     # Perform prediction with model
@@ -140,16 +142,18 @@ if __name__ == '__main__':
 
     # Fixed point computation
     # CSE 548: Todo: tweak the SCALE to get less than 20% classification error
-    SCALE = 36948
+    #SCALE = 36948
+    #SCALE = 2600
+    SCALE = 100
     # CSE 548 - Change me
     offset = reg.intercept_
     weight = reg.coef_
-    offset = np.clip(offset*SCALE, -64, 63)
+    offset = np.clip(offset*SCALE, -8, 7)
     offset = offset.astype(np.int32)
-    weight = np.clip(weight*SCALE, -64, 63)
+    weight = np.clip(weight*SCALE, -8, 7)
     weight = weight.astype(np.int8)
     # Perform fixed-point classification
-    test_data = test_data / 2
+    test_data = test_data / 16
     ones = np.ones(len(test_data)).reshape((len(test_data),1))
     i_p = np.append(ones, test_data, axis=1)
     w_p = np.append(offset.reshape(10,1), weight, axis=1)
