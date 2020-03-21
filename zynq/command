@@ -1,4 +1,4 @@
-scp build/export/classifier.bit xilinx@192.168.2.99:/home/xilinx/pynq/bitstream/classifier_fixed.bit
-scp tcl/classifier.tcl xilinx@192.168.2.99:/home/xilinx/pynq/bitstream/classifier_fixed.tcl
-scp jupyter/classifier_2.ipynb xilinx@192.168.2.99:/home/xilinx/jupyter_notebooks/.
-scp python/*.npy xilinx@192.168.2.99:/home/xilinx/jupyter_notebooks/.
+scp build/export/classifier.bit xilinx@192.168.0.134:/home/xilinx/pynq/bitstream/classifier_fixed.bit
+scp tcl/classifier.tcl xilinx@192.168.0.134:/home/xilinx/pynq/bitstream/classifier_fixed.tcl
+scp jupyter/classifier_2.ipynb xilinx@192.168.0.134:/home/xilinx/jupyter_notebooks/.
+scp python/*.npy xilinx@192.168.0.134:/home/xilinx/jupyter_notebooks/.
