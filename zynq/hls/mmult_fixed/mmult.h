@@ -19,8 +19,10 @@ typedef unsigned long long axi_T;
 // Datatype widths in bits
 // #define W_WIDTH (sizeof(w_T)*8)
 // #define IN_WIDTH (sizeof(in_T)*8)
-#define W_WIDTH 4
-#define IN_WIDTH 4
+#define W_WIDTH 8
+#define IN_WIDTH 8
+#define W_BIT_WIDTH 4
+#define IN_BIT_WIDTH 4
 #define OUT_WIDTH (sizeof(out_T)*8)
 
 // Data type ratio between data type and axi width
@@ -30,13 +32,12 @@ typedef unsigned long long axi_T;
 
 // Matrix dimensions specifications
 #define BATCH 8192
-// #define FEAT 256
 #define FEAT 64
 #define CLASSES 10
 
 // Input matrix tiling factor
 // CSE548: TODO
-#define TILING 2048
+#define TILING 512
 
 // Input/Output Stream Size
 #define IS_SIZE ((CLASSES+OUT_WIDTH_RATIO-1)/OUT_WIDTH_RATIO+CLASSES*FEAT/W_WIDTH_RATIO+BATCH*FEAT/IN_WIDTH_RATIO)

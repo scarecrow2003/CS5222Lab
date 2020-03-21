@@ -146,7 +146,7 @@ if __name__ == '__main__':
     weight = reg.coef_
     offset = np.clip(offset*SCALE, -128, 127)
     offset = offset.astype(np.int32)
-    weight = np.clip(weight*SCALE, -128, 127)
+    weight = np.clip(weight*SCALE, -64, 63)
     weight = weight.astype(np.int8)
     # Perform fixed-point classification
     ones = np.ones(len(test_data)).reshape((len(test_data),1))
