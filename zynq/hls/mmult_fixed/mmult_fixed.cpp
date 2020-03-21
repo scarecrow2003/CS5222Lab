@@ -36,13 +36,13 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 		axi_T packet = pop_stream(in_stream[is_idx++]);
 		UNPACK_OFF: for (int w = 0; w < OUT_WIDTH_RATIO; w++) {
 			out_bit_T bits = (packet>>(w*OUT_WIDTH));
-			offset_buf[i+w] = *((out_T*) &bits) & ((1ULL<<BIT_WIDTH)-1);
+			offset_buf[i+w] = *((out_T*) &bits) & ((1ULL<<OUT_WIDTH)-1);
 		}
 	}
 	axi_T packet = pop_stream(in_stream[is_idx++]);
 	FINISH_OFF: for (int i = CLASSES-OUT_WIDTH_RATIO; i < CLASSES; i++) {
 		out_bit_T bits = (packet>>((i%OUT_WIDTH_RATIO)*OUT_WIDTH));
-		offset_buf[i] = *((out_T*) &bits) & ((1ULL<<BIT_WIDTH)-1);
+		offset_buf[i] = *((out_T*) &bits) & ((1ULL<<OUT_WIDTH)-1);
 	}
 
 	// Stream in weight matrix
@@ -52,7 +52,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 			axi_T packet = pop_stream(in_stream[is_idx++]);
 			UNPACK_W: for (int w = 0; w < W_WIDTH_RATIO; w++) {
 				w_bit_T bits = (packet>>(w*W_WIDTH));
-				weight_buf[i][j+w] = *((w_T*) &bits) & ((1ULL<<BIT_WIDTH)-1);
+				weight_buf[i][j+w] = *((w_T*) &bits) & ((1ULL<<W_BIT_WIDTH)-1);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ void mmult_hw (AXI_VAL in_stream[IS_SIZE], AXI_VAL out_stream[OS_SIZE])
 				axi_T packet = pop_stream(in_stream[is_idx++]);
 				UNPACK_IN: for (int w = 0; w < IN_WIDTH_RATIO; w++) {
 					in_bit_T bits = (packet>>(w*IN_WIDTH));
-					in_buf[i][j+w] = *((in_T*) &bits) & ((1ULL<<BIT_WIDTH)-1);
+					in_buf[i][j+w] = *((in_T*) &bits) & ((1ULL<<IN_BIT_WIDTH)-1);
 				}
 			}
 		}
