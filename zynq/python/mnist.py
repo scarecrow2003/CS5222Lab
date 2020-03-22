@@ -144,7 +144,7 @@ if __name__ == '__main__':
     # CSE 548: Todo: tweak the SCALE to get less than 20% classification error
     #SCALE = 36948
     #SCALE = 2600
-    SCALE = 100
+    SCALE = 560
     # CSE 548 - Change me
     offset = reg.intercept_
     weight = reg.coef_
@@ -158,7 +158,6 @@ if __name__ == '__main__':
     i_p = np.append(ones, test_data, axis=1)
     w_p = np.append(offset.reshape(10,1), weight, axis=1)
     fixed_labels = np.dot(i_p, w_p.T)
-
     # Measure Validation Errors
     float_errors = 0
     for idx, label in enumerate(test_labels):
